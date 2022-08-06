@@ -31,7 +31,11 @@ namespace FreeBird.Rendering
         protected override void BeforeRender(CommandBuffer commandBuffer, ref RenderingData renderingData)
         {
             ref var cameraData = ref renderingData.cameraData;//汇入摄像机数据
-
+            if (!component.DebugDOF.value)
+            {
+                commandBuffer.GetTemporaryRT(TempBuffer1, cameraData.camera.scaledPixelWidth, cameraData.camera.scaledPixelHeight, 0, FilterMode.Trilinear, RenderTextureFormat.Default);//设置目标贴图
+                commandBuffer.GetTemporaryRT(TempBuffer2, cameraData.camera.scaledPixelWidth, cameraData.camera.scaledPixelHeight, 0, FilterMode.Trilinear, RenderTextureFormat.Default);//设置目标贴图
+            }
             material.SetColor("_ColorTint", component.colorChange.value);//汇入颜色校正
             material.SetFloat("_BlurRange", component.GuassianBlurRange.value);//汇入颜色校正
             material.SetFloat("_DOFForce", component.DOFForce.value);//汇入颜色校正
@@ -47,9 +51,6 @@ namespace FreeBird.Rendering
             commandBuffer.SetGlobalTexture(MainTexId, source);//汇入当前渲染图片
             if (!component.DebugDOF.value)
             {
-                commandBuffer.GetTemporaryRT(TempBuffer1, cameraData.camera.scaledPixelWidth, cameraData.camera.scaledPixelHeight, 0, FilterMode.Trilinear, RenderTextureFormat.Default);//设置目标贴图
-                commandBuffer.GetTemporaryRT(TempBuffer2, cameraData.camera.scaledPixelWidth, cameraData.camera.scaledPixelHeight, 0, FilterMode.Trilinear, RenderTextureFormat.Default);//设置目标贴图
-
                 commandBuffer.Blit(source, TempBuffer1);//输入
                 DualBlur(commandBuffer, cameraData);//双重模糊
                 commandBuffer.Blit(TempBuffer1, source);//输出
