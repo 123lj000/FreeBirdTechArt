@@ -38,7 +38,7 @@ namespace FreeBird.Rendering
             //光线追踪位置
             commandBuffer.Blit(null, GodRayResultTexture, material, 0);
             //光线追踪结果
-            commandBuffer.Blit(source, source, material, 1);
+            commandBuffer.Blit(dest, source, material, 1);
         }
         protected override void CleanupRenderTexture(CommandBuffer commandBuffer, ref RenderingData renderingData)
         {
