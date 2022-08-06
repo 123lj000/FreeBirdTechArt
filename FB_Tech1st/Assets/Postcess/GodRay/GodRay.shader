@@ -20,8 +20,8 @@
         float4 vertex : SV_POSITION;
     };
 
-    sampler2D _MainTex;
-    sampler2D _GodRayResTex;
+    sampler2D _MainTex;//屏幕贴图
+    sampler2D _GodRayResTex;//光线追踪的结果
     float4 _MainTex_ST;
     float4 _GodRayColor;//设置颜色校正位置
 

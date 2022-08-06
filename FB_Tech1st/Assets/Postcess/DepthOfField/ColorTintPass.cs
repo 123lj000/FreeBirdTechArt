@@ -62,6 +62,15 @@ namespace FreeBird.Rendering
         }
         #endregion
 
+        #region 【释放贴图】
+        protected override void CleanupRenderTexture(CommandBuffer commandBuffer, ref RenderingData renderingData)
+        {
+            commandBuffer.ReleaseTemporaryRT(TempBuffer1); //释放RT
+            commandBuffer.ReleaseTemporaryRT(TempBuffer2); //释放RT
+            base.CleanupRenderTexture(commandBuffer, ref renderingData);
+        }
+        #endregion
+
         #region【工具箱】
         int Pow2(float a)
         {

@@ -43,7 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c17aab3beab81124eb85b2f9fc596a9c, type: 3}
   m_Name: ColorTintPass
   m_EditorClassIdentifier: 
-  m_Active: 0
+  m_Active: 1
   settings:
     renderPassEvent: 550
     shader: {fileID: 4800000, guid: 9f524c4c841766d45ba2ce437f048e2b, type: 3}

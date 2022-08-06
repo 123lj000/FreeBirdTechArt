@@ -40,6 +40,11 @@ namespace FreeBird.Rendering
             //光线追踪结果
             commandBuffer.Blit(source, source, material, 1);
         }
+        protected override void CleanupRenderTexture(CommandBuffer commandBuffer, ref RenderingData renderingData)
+        {
+            commandBuffer.ReleaseTemporaryRT(GodRayResultTexture); //释放RT
+            commandBuffer.ReleaseTemporaryRT(TempColorBufferId); //释放RT
+        }
         #endregion
     }
 }
