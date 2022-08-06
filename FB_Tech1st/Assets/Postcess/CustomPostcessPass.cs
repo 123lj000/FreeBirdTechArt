@@ -32,7 +32,7 @@ namespace FreeBird.Rendering
 
             if (this.shader == null)
             {
-                Debug.Log("后处理：" + RenderTag + "的shader失效，请排查");
+                Debug.LogError("后处理：" + RenderTag + "的shader失效，请排查");
                 return;
             }
 
@@ -56,7 +56,7 @@ namespace FreeBird.Rendering
             }
             if (material == null)
             {
-                Debug.Log("后处理：" + RenderTag + "的material失效，请排查");
+                Debug.LogError("后处理：" + RenderTag + "的material失效，请排查");
                 return;
             }
             //【渲染设置】

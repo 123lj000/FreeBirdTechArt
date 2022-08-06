@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c99e8ba8522663d4bb859133040e3261, type: 3}
   m_Name: ColorTint
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   m_AdvancedMode: 0
   colorChange:
     m_OverrideState: 1
@@ -55,6 +55,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   components:
   - {fileID: -2058961909394065508}
+  - {fileID: 7527712683716889168}
 --- !u!114 &6736837597202387825
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -96,3 +97,26 @@ MonoBehaviour:
   DebugDOF:
     m_OverrideState: 0
     m_Value: 0
+--- !u!114 &7527712683716889168
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4badef18ed2c41949b5153ea71f145b9, type: 3}
+  m_Name: GodRay
+  m_EditorClassIdentifier: 
+  active: 1
+  m_AdvancedMode: 0
+  mainColor:
+    m_OverrideState: 1
+    m_Value: {r: 1, g: 0.9001149, b: 0.6745283, a: 1}
+    hdr: 0
+    showAlpha: 1
+    showEyeDropper: 1
+  GodRayRes:
+    m_OverrideState: 1
+    m_Value: 0.698

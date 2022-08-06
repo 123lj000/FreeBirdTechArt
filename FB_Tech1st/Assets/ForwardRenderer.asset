@@ -43,7 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c17aab3beab81124eb85b2f9fc596a9c, type: 3}
   m_Name: ColorTintPass
   m_EditorClassIdentifier: 
-  m_Active: 1
+  m_Active: 0
   settings:
     renderPassEvent: 550
     shader: {fileID: 4800000, guid: 9f524c4c841766d45ba2ce437f048e2b, type: 3}
@@ -76,8 +76,9 @@ MonoBehaviour:
   m_Name: ForwardRenderer
   m_EditorClassIdentifier: 
   m_RendererFeatures:
+  - {fileID: 5812380253195976141}
   - {fileID: -4369606038347745782}
-  m_RendererFeatureMap: 0a76e193750a5cc3
+  m_RendererFeatureMap: cdbd3d830bb9a9500a76e193750a5cc3
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   shaders:
     blitPS: {fileID: 4800000, guid: c17132b1f77d20942aa75f8429c0f8bc, type: 3}
@@ -115,3 +116,19 @@ MonoBehaviour:
   m_Active: 0
   settings:
     material: {fileID: 0}
+--- !u!114 &5812380253195976141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2524c12d25209a458ff7d8b9f117101, type: 3}
+  m_Name: GodRayPass
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  settings:
+    renderPassEvent: 550
+    shader: {fileID: 4800000, guid: dc996399b186d1c4dbc2a2d7b20331a5, type: 3}
