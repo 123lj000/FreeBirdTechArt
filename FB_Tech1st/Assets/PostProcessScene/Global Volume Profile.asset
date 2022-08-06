@@ -31,13 +31,13 @@ MonoBehaviour:
     m_Value: 1
   DOFForce:
     m_OverrideState: 1
-    m_Value: 0.22
+    m_Value: 0.453
   DOFStrength1:
     m_OverrideState: 1
-    m_Value: 20
+    m_Value: 9.3
   DOFStrength2:
     m_OverrideState: 1
-    m_Value: 6.1
+    m_Value: 7.6
   DebugDOF:
     m_OverrideState: 1
     m_Value: 0

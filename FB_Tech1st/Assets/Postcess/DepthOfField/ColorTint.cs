@@ -18,4 +18,6 @@ public class ColorTint : VolumeComponent
     public FloatParameter DOFStrength1 = new ClampedFloatParameter(0.5f, 0.0f, 20.0f);
     public FloatParameter DOFStrength2 = new ClampedFloatParameter(0.5f, 0.0f, 20.0f);
     public BoolParameter DebugDOF = new BoolParameter(false);
+
+    public bool IsActive => (DualBlurTimes.value > 0 && GuassianBlurTimes.value > 0);
 }

@@ -2,11 +2,21 @@
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
-public class CustomRenderPassFeature : ScriptableRendererFeature
+public class BlitRenderPassFeature : ScriptableRendererFeature
 {
     class CustomRenderPass : ScriptableRenderPass
     {
         public RenderTargetIdentifier source;
+
+        private Material material;
+        private RenderTargetHandle tempRenderTargetHandler;
+
+        public CustomRenderPass(Material material)
+        {
+            this.material = material;
+
+            tempRenderTargetHandler.Init("TempColorTexture");
+        }
         // This method is called before executing the render pass.
         // It can be used to configure render targets and their clear state. Also to create temporary render target textures.
         // When empty this render pass will render to the active camera render target.
@@ -23,7 +33,13 @@ public class CustomRenderPassFeature : ScriptableRendererFeature
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
         {
             CommandBuffer commandBuffer = CommandBufferPool.Get();
-            //Blit(commandBuffer,source,source,)
+
+            commandBuffer.GetTemporaryRT(tempRenderTargetHandler.id, renderingData.cameraData.cameraTargetDescriptor);
+            Blit(commandBuffer, source, tempRenderTargetHandler.Identifier(), material,1);
+            Blit(commandBuffer, tempRenderTargetHandler.Identifier(), source);
+
+            context.ExecuteCommandBuffer(commandBuffer);
+            CommandBufferPool.Release(commandBuffer);
         }
 
         /// Cleanup any allocated resources that were created during the execution of this render pass.
@@ -41,7 +57,7 @@ public class CustomRenderPassFeature : ScriptableRendererFeature
     public Settings settings = new Settings();
     public override void Create()
     {
-        m_ScriptablePass = new CustomRenderPass();
+        m_ScriptablePass = new CustomRenderPass(settings.material);
 
         // Configures where the render pass should be injected.
         m_ScriptablePass.renderPassEvent = RenderPassEvent.BeforeRenderingPostProcessing;
