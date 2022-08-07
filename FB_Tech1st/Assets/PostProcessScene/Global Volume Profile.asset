@@ -122,10 +122,10 @@ MonoBehaviour:
     m_Value: 0.966
   MaxDistance:
     m_OverrideState: 1
-    m_Value: 89
+    m_Value: 54
   MinDistance:
     m_OverrideState: 1
-    m_Value: 7.4
+    m_Value: 0
   MaxIterations:
     m_OverrideState: 1
     m_Value: 200
