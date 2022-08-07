@@ -187,7 +187,7 @@
 
                 float3 FinalColor = (IndirColor + DirectColor) * AO * light.shadowAttenuation * light.distanceAttenuation;//汇入阴影和汇入距离衰减
 
-                return float4(FinalColor, 1.0);
+                return float4(max(FinalColor,0.0), 1.0);
             }
             ENDHLSL
 

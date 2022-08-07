@@ -12,6 +12,10 @@ namespace FreeBird.Rendering
         //【设置颜色参数】
         public ColorParameter mainColor = new ColorParameter(Color.white, true);//设置颜色
         public FloatParameter GodRayRes = new ClampedFloatParameter(1.0f,0.0f,1.0f);//光线追踪的结果
+        public FloatParameter MaxDistance = new ClampedFloatParameter(1.0f,0.0f,200.0f);//最大距离
+        public FloatParameter MinDistance = new ClampedFloatParameter(1.0f,0.0f,20.0f);//最大距离
+        public IntParameter MaxIterations = new ClampedIntParameter(1,0,200);//迭代次数
+        public FloatParameter Intensity = new ClampedFloatParameter(1.0f,0.0f,1.0f);//最大距离
 
         public bool IsActive => true;
     }
