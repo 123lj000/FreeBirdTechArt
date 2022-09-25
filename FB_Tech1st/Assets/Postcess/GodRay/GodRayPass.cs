@@ -9,6 +9,8 @@ namespace FreeBird.Rendering
         protected override string RenderTag => "GodRay";
         static readonly int GodRayResultTexture = Shader.PropertyToID("_GodRayResTex");//设置暂存贴图
         private GameObject directionLightGameObject = null;
+        static readonly int TempBuffer1 = Shader.PropertyToID("_TempBuffer1");//设置暂存贴图
+        static readonly int TempBuffer2 = Shader.PropertyToID("_TempBuffer2");//设置暂存贴图
 
         #region 设置渲染事件
         public GodRayPass(RenderPassEvent renderPassEvent, Shader shader) : base(renderPassEvent, shader)
@@ -28,7 +30,10 @@ namespace FreeBird.Rendering
         {
             ref var cameraData = ref renderingData.cameraData;//汇入摄像机数据
             Camera camera = cameraData.camera;//获得摄像机
-            commandBuffer.GetTemporaryRT(GodRayResultTexture, cameraData.camera.scaledPixelWidth, cameraData.camera.scaledPixelHeight, 0, FilterMode.Trilinear, RenderTextureFormat.Default);//设置目标贴图
+            int DownScale = component.GodRayTextureDownScale.value;//汇入分辨率下降
+            commandBuffer.GetTemporaryRT(GodRayResultTexture, cameraData.camera.scaledPixelWidth / DownScale, cameraData.camera.scaledPixelHeight / DownScale, 0, FilterMode.Trilinear, RenderTextureFormat.R16);//设置目标贴图
+            commandBuffer.GetTemporaryRT(TempBuffer1, cameraData.camera.scaledPixelWidth / DownScale, cameraData.camera.scaledPixelHeight / DownScale, 0, FilterMode.Trilinear, RenderTextureFormat.R16);//设置目标贴图
+            commandBuffer.GetTemporaryRT(TempBuffer2, cameraData.camera.scaledPixelWidth / DownScale, cameraData.camera.scaledPixelHeight / DownScale, 0, FilterMode.Trilinear, RenderTextureFormat.R16);//设置目标贴图
 
             material.SetMatrix("_CameraFrustum", FrustumCorners(camera));//四条矢量
             material.SetColor("_GodRayColor", component.mainColor.value);//汇入颜色校正
@@ -38,6 +43,7 @@ namespace FreeBird.Rendering
             material.SetFloat("_Intensity", component.Intensity.value);//汇入最小距离
             material.SetInt("_LightRangePower", component.LightRangePower.value);//汇入光照衰减函数
             material.SetFloat("_MaxIterations", component.MaxIterations.value);//汇入迭代次数
+            material.SetFloat("_BlurRange", component.BlurRange.value);//汇入模糊半径
 
             //汇入平行光的视角空间位置                               //摄像机的位置 + 平行光的远平面得到太阳的位置
             Vector3 DirectionalLightPos = camera.WorldToViewportPoint(camera.transform.position + directionLightGameObject.transform.forward * camera.farClipPlane);
@@ -51,6 +57,8 @@ namespace FreeBird.Rendering
         {
             //光线追踪位置
             commandBuffer.Blit(null, GodRayResultTexture, material, 0);
+            //高斯模糊
+            GussianBlurGodRay(commandBuffer, GodRayResultTexture);
             //光线追踪结果
             commandBuffer.Blit(dest, source, material, 1);
         }
@@ -58,6 +66,23 @@ namespace FreeBird.Rendering
         {
             commandBuffer.ReleaseTemporaryRT(GodRayResultTexture); //释放RT
             commandBuffer.ReleaseTemporaryRT(TempColorBufferId); //释放RT
+        }
+        #endregion
+
+        #region 高斯模糊
+        void GussianBlurGodRay(CommandBuffer commandBuffer,int BlurTexture)
+        {
+            commandBuffer.Blit(BlurTexture, TempBuffer1);//初始化
+
+            for (int i = 0; i < component.BlurTimes.value; i++)
+            {
+                commandBuffer.Blit(TempBuffer1, TempBuffer2, material, 2);//横
+                commandBuffer.Blit(TempBuffer2, TempBuffer1, material, 3);//纵
+            }
+
+            commandBuffer.Blit(TempBuffer2, BlurTexture);//初始化
+            commandBuffer.ReleaseTemporaryRT(TempBuffer1);
+            commandBuffer.ReleaseTemporaryRT(TempBuffer2);
         }
         #endregion
 

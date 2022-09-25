@@ -111,6 +111,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   active: 1
   m_AdvancedMode: 0
+  GodRayTextureDownScale:
+    m_OverrideState: 1
+    m_Value: 8
   mainColor:
     m_OverrideState: 1
     m_Value: {r: 0.9811321, g: 0.9017585, b: 0.56924176, a: 1}
@@ -128,10 +131,16 @@ MonoBehaviour:
     m_Value: 0
   MaxIterations:
     m_OverrideState: 1
-    m_Value: 200
+    m_Value: 44
   Intensity:
     m_OverrideState: 1
     m_Value: 1
   LightRangePower:
     m_OverrideState: 1
-    m_Value: 3
+    m_Value: 1
+  BlurRange:
+    m_OverrideState: 1
+    m_Value: 0.68
+  BlurTimes:
+    m_OverrideState: 1
+    m_Value: 4

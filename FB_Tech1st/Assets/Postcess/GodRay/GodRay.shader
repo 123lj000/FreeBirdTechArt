@@ -39,6 +39,7 @@
     float _MinDistance;//最大距离
     float _MaxIterations;//迭代次数
     float _Intensity;//godray强度
+    float _BlurRange;//模糊半径
     int _LightRangePower;//指数衰减
 
     //【光线追踪结果】
@@ -132,6 +133,32 @@
         return final_color;
     }
 
+    //高斯模糊
+    float4 GuassianBluracrossfrag(v2f i) : SV_Target
+    {
+        // sample the texture
+        //【包围盒:横模糊】
+        float blurrange = _BlurRange / 50;
+        float Left = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv + float2(-blurrange, 0.0)) * 0.2;
+        float Mid = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv + float2(0, 0.0)) * 0.6;
+        float Right = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv + float2(blurrange, 0.0)) * 0.2;
+        float col = Left + Mid + Right;
+        // apply fog
+        return col;
+    }
+    float4 GuassianBlurcolumnfrag(v2f i) : SV_Target
+    {
+        // sample the texture
+        //【包围盒:纵模糊】
+        float blurrange = _BlurRange / 50;
+        float Down = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv + float2(0.0, -blurrange)) * 0.2;
+        float Mid = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv + float2(0, 0.0)) * 0.6;
+        float Up = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv + float2(0.0, +blurrange)) * 0.2;
+        float col = Down + Mid + Up;
+        // apply fog
+        return col;
+    }
+
     ENDHLSL
 
     SubShader
@@ -156,6 +183,26 @@
 
             #pragma vertex GodRayCombinevert
             #pragma fragment GodRayCombine
+            ENDHLSL
+
+        }
+        //高斯模糊横
+        Pass
+        {
+            HLSLPROGRAM
+
+            #pragma vertex GodRayCombinevert
+            #pragma fragment GuassianBluracrossfrag
+            ENDHLSL
+
+        }
+        //高斯模糊竖
+        Pass
+        {
+            HLSLPROGRAM
+
+            #pragma vertex GodRayCombinevert
+            #pragma fragment GuassianBlurcolumnfrag
             ENDHLSL
 
         }
