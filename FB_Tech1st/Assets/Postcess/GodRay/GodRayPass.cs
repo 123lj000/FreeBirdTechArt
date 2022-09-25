@@ -8,6 +8,7 @@ namespace FreeBird.Rendering
     {
         protected override string RenderTag => "GodRay";
         static readonly int GodRayResultTexture = Shader.PropertyToID("_GodRayResTex");//设置暂存贴图
+        private GameObject directionLightGameObject = null;
 
         #region 设置渲染事件
         public GodRayPass(RenderPassEvent renderPassEvent, Shader shader) : base(renderPassEvent, shader)
@@ -35,7 +36,13 @@ namespace FreeBird.Rendering
             material.SetFloat("_MaxDistance", component.MaxDistance.value);//汇入最大距离
             material.SetFloat("_MinDistance", component.MinDistance.value);//汇入最小距离
             material.SetFloat("_Intensity", component.Intensity.value);//汇入最小距离
+            material.SetInt("_LightRangePower", component.LightRangePower.value);//汇入光照衰减函数
             material.SetFloat("_MaxIterations", component.MaxIterations.value);//汇入迭代次数
+
+            //汇入平行光的视角空间位置                               //摄像机的位置 + 平行光的远平面得到太阳的位置
+            Vector3 DirectionalLightPos = camera.WorldToViewportPoint(camera.transform.position + directionLightGameObject.transform.forward * camera.farClipPlane);
+            Vector4 viewDirectionalLightPos = new Vector4(DirectionalLightPos.x, DirectionalLightPos.y, 0, 0);//传递
+            material.SetVector("_LightViewPos", viewDirectionalLightPos);//汇入视角空间的位置
         }
         #endregion
 
@@ -70,6 +77,13 @@ namespace FreeBird.Rendering
             FrustumVectors.SetRow(3, cameraTransform.TransformVector(corners[2]));//右上角
 
             return FrustumVectors;
+        }
+        #endregion
+
+        #region 【汇入光照OBJ】
+        public void SetDirectionalLight(GameObject light)
+        {
+            this.directionLightGameObject = light;
         }
         #endregion
     }

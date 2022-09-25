@@ -33,11 +33,13 @@
     TEXTURE2D(_GodRayResTex);SAMPLER(sampler_GodRayResTex);//光线追踪的结果
     float4 _MainTex_ST;
     float4 _GodRayColor;//设置颜色校正位置
+    float4 _LightViewPos;//平行光视角空间位置
     float4x4 _CameraFrustum;//摄像机四条矢量
     float _MaxDistance;//最大距离
     float _MinDistance;//最大距离
     float _MaxIterations;//迭代次数
     float _Intensity;//godray强度
+    int _LightRangePower;//指数衰减
 
     //【光线追踪结果】
     float _GodRayRes;
@@ -86,6 +88,7 @@
             float4 shadowCoord = TransformWorldToShadowCoord(p);//获得采样shadow的参数
             float shadow = SAMPLE_TEXTURE2D_SHADOW(_MainLightShadowmapTexture, sampler_MainLightShadowmapTexture, shadowCoord);//判断点是不是在阴影里面
             if (shadow >= 1)//不在阴影里面
+
             {
                 Result += step * 0.01;//不在阴影里面，加光照
 
@@ -100,13 +103,20 @@
     //【光线追踪的过程】
     float4 GodRayfrag(Rayv2f i) : SV_Target
     {
+        //光照衰减距离判断
+        float2 lightViewUV = _LightViewPos.xy - i.uv;//
+        float lightViewDistance = length(lightViewUV) / 1.415;//距离
+        lightViewDistance = 1 - lightViewDistance;//光照中心是1
+
+        lightViewDistance = pow(lightViewDistance, _LightRangePower) ;
+
         float depth = SampleSceneDepth(i.uv);//深度
         float depthValue = Linear01Depth(depth, _ZBufferParams);//01深度值
         depthValue *= length(i.ray);
 
         float3 rayOrigin = _WorldSpaceCameraPos.xyz;//摄像机的起始位置
         float3 rayDir = normalize(i.ray.xyz);//射线方向
-        float rayResult = RayMarching(rayOrigin, rayDir, depthValue);//汇入摄像机位置，射线方向，和深度值
+        float rayResult = lightViewDistance * RayMarching(rayOrigin, rayDir, depthValue);//汇入摄像机位置，射线方向，和深度值
 
         return rayResult;
     }

@@ -16,6 +16,7 @@ namespace FreeBird.Rendering
         public FloatParameter MinDistance = new ClampedFloatParameter(1.0f,0.0f,20.0f);//最大距离
         public IntParameter MaxIterations = new ClampedIntParameter(1,0,200);//迭代次数
         public FloatParameter Intensity = new ClampedFloatParameter(1.0f,0.0f,1.0f);//最大距离
+        public IntParameter LightRangePower = new ClampedIntParameter(1, 0, 8);//汇入光照衰减函数
 
         public bool IsActive => true;
     }

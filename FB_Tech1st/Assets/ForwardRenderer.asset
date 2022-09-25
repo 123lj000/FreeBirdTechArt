@@ -132,3 +132,4 @@ MonoBehaviour:
   settings:
     renderPassEvent: 550
     shader: {fileID: 4800000, guid: dc996399b186d1c4dbc2a2d7b20331a5, type: 3}
+    directionalLight: {fileID: 0}

@@ -113,13 +113,13 @@ MonoBehaviour:
   m_AdvancedMode: 0
   mainColor:
     m_OverrideState: 1
-    m_Value: {r: 1, g: 0.9732704, b: 0.9198113, a: 1}
+    m_Value: {r: 0.9811321, g: 0.9017585, b: 0.56924176, a: 1}
     hdr: 0
     showAlpha: 1
     showEyeDropper: 1
   GodRayRes:
     m_OverrideState: 1
-    m_Value: 0.966
+    m_Value: 1
   MaxDistance:
     m_OverrideState: 1
     m_Value: 54
@@ -132,3 +132,6 @@ MonoBehaviour:
   Intensity:
     m_OverrideState: 1
     m_Value: 1
+  LightRangePower:
+    m_OverrideState: 1
+    m_Value: 3
