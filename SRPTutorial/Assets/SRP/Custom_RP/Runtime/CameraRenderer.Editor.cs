@@ -1,6 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.Profiling;
 
 partial class CameraRenderer  //【Editor层面代码】
 {
@@ -9,6 +10,7 @@ partial class CameraRenderer  //【Editor层面代码】
     partial void DrawUnSupportedShaders();//不支持的shader绘制
     partial void PrepareForSceneWindow();//绘制屏幕窗口UI
 
+    partial void PrepareBuffer();//准备buffer：摄像机名字汇入
 
 #if UNITY_EDITOR
     static Material errorMaterial;//错误材质设置
@@ -22,7 +24,17 @@ partial class CameraRenderer  //【Editor层面代码】
         new ShaderTagId("VertexLMRGBM"),
         new ShaderTagId("VertexLM")
     };
-    
+
+    string SampleName { get; set; }//采样信息名
+
+    //准备buffer：摄像机名字汇入
+    partial void PrepareBuffer()
+    {
+        Profiler.BeginSample("Editor Only");
+        buffer.name = SampleName = camera.name;
+        Profiler.EndSample();
+    }
+
     //绘制屏幕UI
     partial void PrepareForSceneWindow()
     {
@@ -31,7 +43,6 @@ partial class CameraRenderer  //【Editor层面代码】
             ScriptableRenderContext.EmitWorldGeometryForSceneView(camera);//绘制屏幕UI几何体
         }
     }
-
 
     //绘制线框
     partial void DrawGizmos()
@@ -62,5 +73,7 @@ partial class CameraRenderer  //【Editor层面代码】
         FilteringSettings filteringSettings = FilteringSettings.defaultValue;//默认过滤值
         context.DrawRenderers(cullingResults, ref drawingSettings, ref filteringSettings);//渲染context汇入设置
     }
+#else
+    string SampleName => bufferName;//采样信息名
 #endif
 }

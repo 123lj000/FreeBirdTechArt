@@ -18,13 +18,14 @@ public partial class CameraRenderer
         this.context = context;//汇入渲染CMD信息
         this.camera = camera;//汇入摄像机信息
 
-        Setup();//准备摄像机信息
-
+        PrepareBuffer();
         PrepareForSceneWindow();
         if (!Cull())
         {
             return;
         }
+
+        Setup();//准备摄像机信息
 
         DrawVisibleGeometry();//渲染可见几何体
 
@@ -44,8 +45,9 @@ public partial class CameraRenderer
     void Setup()//设置摄像机相关信息
     {
         context.SetupCameraProperties(camera);//准备摄像机的属性
-        buffer.ClearRenderTarget(true, true, Color.clear);//清除RT
-        buffer.BeginSample(bufferName);//渲染信息收集开始的位置
+        CameraClearFlags flags = camera.clearFlags;//clearflage，为了进行正常的摄像机图形合并
+        buffer.ClearRenderTarget(flags <= CameraClearFlags.Depth, flags == CameraClearFlags.Color, flags == CameraClearFlags.Color ? camera.backgroundColor.linear : Color.clear);//清除RT
+        buffer.BeginSample(SampleName);//渲染信息开始采样的位置
         ExecuteBuffer();//执行buffer
     }
 
@@ -93,7 +95,7 @@ public partial class CameraRenderer
 
     void Submit()
     {
-        buffer.EndSample(bufferName);//渲染信息收集结束的位置
+        buffer.EndSample(SampleName);//渲染信息结束采样的位置
         ExecuteBuffer();//执行buffer
         context.Submit();//提交drawcall
     }
